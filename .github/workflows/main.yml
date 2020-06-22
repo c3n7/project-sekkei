@@ -33,13 +33,12 @@ jobs:
         
     - name: Install hover
       run: |
+        export GOPATH="`pwd`.go"
         GO111MODULE=on go get -u -a github.com/go-flutter-desktop/hover
         export PATH="$PATH:`pwd`/go/bin"
     
     - name: Build project
       run: |
         export PATH="$PATH:`pwd`/flutter/bin"
-        export PATH="$PATH:`pwd`/go/bin"
-        ls
         flutter pub get
-        hover build linux
+        .go/bin/hover build linux
