@@ -50,7 +50,7 @@ jobs:
         export PATH="$PATH:`go env GOPATH`/bin"
         export PATH="$PATH:`pwd`/appimagetool"
         flutter pub get
-        hover build linux
+        hover build linux-appimage
         
     - name: Run tests
       run: |
