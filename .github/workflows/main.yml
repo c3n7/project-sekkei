@@ -58,7 +58,6 @@ jobs:
         export PATH="$PATH:`go env GOPATH`/bin"
         export PATH="$PATH:`pwd`/appimagetool"
         hover build windows-msi
-        ls go/build/outputs/windows-msi
         
     - name: Run tests
       run: |
@@ -66,7 +65,7 @@ jobs:
         ./flutter/bin/flutter test --coverage
         bash <(curl -s https://codecov.io/bash) -f coverage/lcov.info
       
-    - name: Create Release
+    - name: Publish Release
       uses: ncipollo/release-action@v1
       with:
         allowUpdates: True
