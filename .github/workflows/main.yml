@@ -37,10 +37,18 @@ jobs:
         sudo apt-get install gcc libc6-dev libgl1-mesa-dev xorg-dev
         GO111MODULE=on go get -u -a github.com/go-flutter-desktop/hover
     
+    - name: Install AppImage build tool
+      run: |
+        mkdir appimagetool && cd appimagetool
+        wget -nv -c https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+        ln -s appimagetool-x86_64.AppImage appimagetool
+        chmod +x appimagetool && cd ..
+    
     - name: Build project
       run: |
         export PATH="$PATH:`pwd`/flutter/bin"
         export PATH="$PATH:`go env GOPATH`/bin"
+        export PATH="$PATH:`pwd`/appimagetool"
         flutter pub get
         hover build linux
         
@@ -49,4 +57,26 @@ jobs:
         export CODECOV_TOKEN="1249b809-5297-4530-828c-4da44a3cd7de"
         ./flutter/bin/flutter test --coverage
         bash <(curl -s https://codecov.io/bash) -f coverage/lcov.info
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: continuous
+        release_name: Continuous build
+        prerelease: True
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: go/build/outputs/linux-appimage/project_sekkei-1.0.0-x86_64.AppImage
+        asset_name: project_sekkei-1.0.0-x86_64.AppImage
+        asset_content_type: application/zip
 
