@@ -65,5 +65,5 @@ jobs:
         tag: continuous
         name: Continuous build
         prerelease: True
-        artifacts: go/build/outputs/linux-appimage/project_sekkei-1.0.0-x86_64.AppImage
+        artifacts: "go/build/outputs/linux-appimage/project_sekkei-1.0.0-x86_64.AppImage"
         token: ${{ secrets.GITHUB_TOKEN }}
