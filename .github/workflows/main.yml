@@ -22,7 +22,7 @@ jobs:
 
     - name: Install flutter sdk
       run: |
-        git clone https://github.com/flutter/flutter.git
+        git clone https://github.com/flutter/flutter.git -b beta
         export PATH="$PATH:`pwd`/flutter/bin"
         flutter doctor
         
@@ -33,12 +33,13 @@ jobs:
         
     - name: Install hover
       run: |
+        sudo apt-get update
+        sudo apt-get install gcc libc6-dev libgl1-mesa-dev xorg-dev
         GO111MODULE=on go get -u -a github.com/go-flutter-desktop/hover
     
     - name: Build project
       run: |
         export PATH="$PATH:`pwd`/flutter/bin"
         export PATH="$PATH:`go env GOPATH`/bin"
-        go env GOPATH
         flutter pub get
         hover build linux
