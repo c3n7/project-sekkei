@@ -47,6 +47,6 @@ jobs:
     - name: Run tests
       run: |
         export CODECOV_TOKEN="1249b809-5297-4530-828c-4da44a3cd7de"
-        flutter test --coverage
+        ./flutter/bin/flutter test --coverage
         bash <(curl -s https://codecov.io/bash) -f coverage/lcov.info
 
