@@ -34,7 +34,7 @@ jobs:
     - name: Install hover
       run: |
         sudo apt-get update
-        sudo apt-get install gcc libc6-dev libgl1-mesa-dev xorg-dev msitools mingw-w64 msitools
+        sudo apt-get install gcc libc6-dev libgl1-mesa-dev xorg-dev msitools mingw-w64 wixl
         GO111MODULE=on go get -u -a github.com/go-flutter-desktop/hover
     
     - name: Install AppImage build tool
