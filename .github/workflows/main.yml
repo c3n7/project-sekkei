@@ -38,5 +38,7 @@ jobs:
     
     - name: Build project
       run: |
+        export PATH="$PATH:`pwd`/flutter/bin"
+        export PATH="$PATH:`pwd`/go/bin"
         flutter pub get
         hover build linux
