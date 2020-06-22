@@ -34,7 +34,7 @@ jobs:
     - name: Install hover
       run: |
         sudo apt-get update
-        sudo apt-get install gcc libc6-dev libgl1-mesa-dev xorg-dev
+        sudo apt-get install gcc libc6-dev libgl1-mesa-dev xorg-dev msitools mingw-w64 msitools
         GO111MODULE=on go get -u -a github.com/go-flutter-desktop/hover
     
     - name: Install AppImage build tool
@@ -44,13 +44,21 @@ jobs:
         ln -s appimagetool-x86_64.AppImage appimagetool
         chmod +x appimagetool && cd ..
     
-    - name: Build project
+    - name: Build linux
       run: |
         export PATH="$PATH:`pwd`/flutter/bin"
         export PATH="$PATH:`go env GOPATH`/bin"
         export PATH="$PATH:`pwd`/appimagetool"
         flutter pub get
         hover build linux-appimage
+
+    - name: Build windows
+      run: |
+        export PATH="$PATH:`pwd`/flutter/bin"
+        export PATH="$PATH:`go env GOPATH`/bin"
+        export PATH="$PATH:`pwd`/appimagetool"
+        hover build windows-msi
+        ls go/build/outputs/windows-msi
         
     - name: Run tests
       run: |
