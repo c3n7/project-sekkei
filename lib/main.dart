@@ -15,9 +15,29 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
       ),
       home: Scaffold(
-        body: Center(
-          child: Text("Hello Sekkei"),
-        ),
+        body: Column(children: <Widget>[
+          Container(
+            color: Colors.black38,
+            height: 60,
+          ),
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  color: Colors.black12,
+                  width: 80,
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                Container(
+                  color: Colors.black12,
+                  width: 300,
+                ),
+              ],
+            ),
+          ),
+        ]),
       ),
     );
   }
