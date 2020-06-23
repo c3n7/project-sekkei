@@ -1,4 +1,4 @@
-#application-name: "project_sekkei" # Uncomment to modify this value.
+application-name: "Project Sekkei" # Uncomment to modify this value.
 #executable-name: "project_sekkei" # Uncomment to modify this value. Only lowercase a-z, numbers, underscores and no spaces
 #package-name: "projectsekkei" # Uncomment to modify this value. Only lowercase a-z, numbers and no underscores or spaces
 license: "MIT" # MANDATORY: Fill in your SPDX license name: https://spdx.org/licenses
