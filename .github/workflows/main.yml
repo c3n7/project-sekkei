@@ -34,7 +34,7 @@ jobs:
     - name: Install hover
       run: |
         sudo apt-get update
-        sudo apt-get install gcc libc6-dev libgl1-mesa-dev xorg-dev msitools mingw-w64 msitools
+        sudo apt-get install gcc libc6-dev libgl1-mesa-dev xorg-dev msitools mingw-w64 wixl
         GO111MODULE=on go get -u -a github.com/go-flutter-desktop/hover
     
     - name: Install AppImage build tool
@@ -58,7 +58,6 @@ jobs:
         export PATH="$PATH:`go env GOPATH`/bin"
         export PATH="$PATH:`pwd`/appimagetool"
         hover build windows-msi
-        ls go/build/outputs/windows-msi
         
     - name: Run tests
       run: |
@@ -66,12 +65,12 @@ jobs:
         ./flutter/bin/flutter test --coverage
         bash <(curl -s https://codecov.io/bash) -f coverage/lcov.info
       
-    - name: Create Release
+    - name: Publish Release
       uses: ncipollo/release-action@v1
       with:
         allowUpdates: True
         tag: continuous
         name: Continuous build
         prerelease: True
-        artifacts: "go/build/outputs/linux-appimage/project_sekkei-1.0.0-x86_64.AppImage"
+        artifacts: "go/build/outputs/linux-appimage/project_sekkei-1.0.0-x86_64.AppImage, go/build/outputs/windows-msi/project_sekkei 1.0.0.msi"
         token: ${{ secrets.GITHUB_TOKEN }}
