@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
+  bool accepted = false;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -52,40 +53,78 @@ class HomeScreen extends StatelessWidget {
                 width: 80,
                 child: Column(
                   children: <Widget>[
-                    Container(
-                      width: double.infinity,
-                      height: 60,
+                    MaterialButton(
+                      height: 65,
                       child: Icon(
                         Icons.title,
                       ),
+                      onPressed: () {},
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
+                    MaterialButton(
+                      height: 65,
                       child: Icon(
                         Icons.book,
                       ),
+                      onPressed: () {},
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
+                    MaterialButton(
+                      height: 65,
                       child: Icon(
                         Icons.web_asset,
                       ),
+                      onPressed: () {},
                     ),
-                    Container(
-                      color: Color(0xFF525252),
-                      width: double.infinity,
-                      height: 60,
+                    MaterialButton(
+                      autofocus: true,
+                      highlightColor: Color(0xFF525252),
+                      height: 65,
                       child: Icon(
                         Icons.add_alert,
+                      ),
+                      onPressed: () {},
+                    ),
+                    MaterialButton(
+                      height: 65,
+                      child: Icon(
+                        Icons.dns,
+                      ),
+                      onPressed: () {},
+                    ),
+                    Draggable(
+                      axis: Axis.horizontal,
+                      child: Container(
+                        width: double.infinity,
+                        color: Colors.red,
+                        height: 65,
+                      ),
+                      feedback: Container(
+                        width: double.infinity,
+                        color: Colors.green,
+                        height: 95,
+                      ),
+                      childWhenDragging: Container(
+                        width: double.infinity,
+                        color: Colors.blue,
+                        height: 65,
                       ),
                     ),
                     Container(
                       width: double.infinity,
-                      height: 60,
-                      child: Icon(
-                        Icons.dns,
+                      color: Colors.white,
+                      height: 65,
+                      child: DragTarget(
+                        builder: (context, List<String> candidateData,
+                            rejectedData) {
+                          return accepted
+                              ? Container(height: 65, width: double.infinity)
+                              : Container();
+                        },
+                        onWillAccept: (data) {
+                          return true;
+                        },
+                        onAccept: (data) {
+                          accepted = true;
+                        },
                       ),
                     ),
                   ],
