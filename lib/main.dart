@@ -4,6 +4,13 @@ void main() {
   runApp(MyApp());
 }
 
+class SomeData {
+  String name;
+  Color iColor;
+
+  SomeData({this.name, this.iColor});
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -20,10 +27,12 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
-  bool accepted = false;
+  final bool accepted = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       body: Column(children: <Widget>[
         // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
         //                  Top Bar
@@ -34,11 +43,12 @@ class HomeScreen extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Image(
-                    image: AssetImage('assets/images/logo-white.png'),
-                    height: 25,
-                  )),
+                padding: EdgeInsets.only(left: 10),
+                child: Image(
+                  image: AssetImage('assets/images/logo-white.png'),
+                  height: 25,
+                ),
+              ),
             ],
           ),
         ),
@@ -91,40 +101,25 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () {},
                     ),
                     Draggable(
-                      axis: Axis.horizontal,
+                      // axis: Axis.vertical,
+                      data: "Doe",
                       child: Container(
-                        width: double.infinity,
+                        // width: double.infinity,
+                        width: 40,
                         color: Colors.red,
                         height: 65,
                       ),
                       feedback: Container(
-                        width: double.infinity,
+                        width: 40,
+                        // width: double.infinity,
                         color: Colors.green,
-                        height: 95,
+                        height: 60,
                       ),
                       childWhenDragging: Container(
-                        width: double.infinity,
+                        width: 40,
+                        // width: double.infinity,
                         color: Colors.blue,
                         height: 65,
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      color: Colors.white,
-                      height: 65,
-                      child: DragTarget(
-                        builder: (context, List<String> candidateData,
-                            rejectedData) {
-                          return accepted
-                              ? Container(height: 65, width: double.infinity)
-                              : Container();
-                        },
-                        onWillAccept: (data) {
-                          return true;
-                        },
-                        onAccept: (data) {
-                          accepted = true;
-                        },
                       ),
                     ),
                   ],
@@ -134,7 +129,61 @@ class HomeScreen extends StatelessWidget {
               //                Centre Canvas
               // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
               Expanded(
-                child: Container(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    DragTarget(
+                      builder:
+                          (context, List<String> candidateData, rejectedData) {
+                        return Container(
+                          height: 80,
+                          width: 80,
+                          color: Colors.purple,
+                          child: Center(
+                            child: Text("Drop Here"),
+                          ),
+                        );
+                      },
+                      onWillAccept: (data) {
+                        return true;
+                      },
+                      onAccept: (data) {
+                        if (data == "Doe") {
+                          _scaffoldKey.currentState.showSnackBar(
+                            SnackBar(
+                              content: Text('Correct!'),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    DragTarget(
+                      builder:
+                          (context, List<String> candidateData, rejectedData) {
+                        return Container(
+                          height: 80,
+                          width: 80,
+                          color: Colors.purple,
+                          child: Center(
+                            child: Text("Not Here"),
+                          ),
+                        );
+                      },
+                      onWillAccept: (data) {
+                        return true;
+                      },
+                      onAccept: (data) {
+                        if (data == "Doe") {
+                          _scaffoldKey.currentState.showSnackBar(
+                            SnackBar(
+                              content: Text('Wrong!'),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
               // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
               //                Right Sidebar
