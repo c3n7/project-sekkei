@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Project Sekkei',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -191,11 +192,23 @@ class HomeScreen extends StatelessWidget {
               Container(
                 color: Colors.black12,
                 width: 300,
+                child: TextSettingsTab(),
               ),
             ],
           ),
         ),
       ]),
+    );
+  }
+}
+
+class TextSettingsTab extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new Column(
+      children: <Widget>[
+        Text("hello world"),
+      ],
     );
   }
 }
