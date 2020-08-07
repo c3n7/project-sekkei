@@ -113,74 +113,7 @@ class HomeScreenState extends State<HomeScreen> {
                 Container(
                   color: Colors.black12,
                   width: 300,
-                  child: Column(
-                    children: <Widget>[
-                      // Basic
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Text("Basic"),
-                      ),
-                      Column(
-                        children: <Widget>[
-                          _buildDraggableWidget(
-                            icon: FontAwesomeIcons.paragraph,
-                            data: "Text Widget",
-                            title: "Text",
-                          ),
-                          _buildDraggableWidget(
-                            icon: FontAwesomeIcons.image,
-                            data: "Image Widget",
-                            title: "Image",
-                          ),
-                        ],
-                      ),
-
-                      // Layout widgets
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Text("Layout"),
-                      ),
-                      Column(
-                        children: <Widget>[
-                          _buildDraggableWidget(
-                            icon: FontAwesomeIcons.alignCenter,
-                            data: "Align Widget",
-                            title: "Align",
-                          ),
-                          _buildDraggableWidget(
-                            icon: FontAwesomeIcons.vectorSquare,
-                            data: "Center Widget",
-                            title: "Center",
-                          ),
-                          _buildDraggableWidget(
-                            icon: FontAwesomeIcons.compressArrowsAlt,
-                            data: "ConstrainedBox Widget",
-                            title: "Constrained Box",
-                          ),
-                          _buildDraggableWidget(
-                            icon: FontAwesomeIcons.square,
-                            data: "Container Widget",
-                            title: "Container",
-                          ),
-                          _buildDraggableWidget(
-                            icon: FontAwesomeIcons.expandArrowsAlt,
-                            data: "Expanded Widget",
-                            title: "Expanded",
-                          ),
-                          _buildDraggableWidget(
-                            icon: FontAwesomeIcons.compress,
-                            data: "Padding Widget",
-                            title: "Padding",
-                          ),
-                          _buildDraggableWidget(
-                            icon: FontAwesomeIcons.expand,
-                            data: "SizedBox Widget",
-                            title: "Sized Box",
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  child: _CollapsibleWidgetItemList(),
                 ),
                 // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
                 //                Centre Canvas
@@ -226,6 +159,146 @@ class HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+}
+
+class TextSettingsTab extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new Column(
+      children: <Widget>[
+        Text(""),
+      ],
+    );
+  }
+}
+
+class _CollapsibleWidgetItemList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (
+        BuildContext context,
+        int index,
+      ) =>
+          _CollapsibleWidgetItem(data[index]),
+      itemCount: data.length,
+    );
+  }
+}
+
+// One entry in the multilevel list displayed by this app.
+class ItemInWidgetList {
+  final String title;
+  ItemInWidgetList(this.title);
+}
+
+class Category extends ItemInWidgetList {
+  Category(String title, [this.children = const <Category>[]]) : super(title);
+
+  final List<ItemInWidgetList> children;
+}
+
+class WidgetItem extends ItemInWidgetList {
+  WidgetItem({String title, this.data, this.icon}) : super(title);
+
+  final String data;
+  final IconData icon;
+}
+
+// The entire multilevel list displayed by this app.
+final List<Category> data = <Category>[
+  Category(
+    'Basic',
+    <ItemInWidgetList>[
+      WidgetItem(
+        title: 'Text',
+        data: "Text Widget",
+        icon: FontAwesomeIcons.paragraph,
+      ),
+      WidgetItem(
+        title: 'Image',
+        data: "Image Widget",
+        icon: FontAwesomeIcons.image,
+      ),
+    ],
+  ),
+  Category(
+    'Layout',
+    <ItemInWidgetList>[
+      WidgetItem(
+        icon: FontAwesomeIcons.alignCenter,
+        data: "Align Widget",
+        title: "Align",
+      ),
+      WidgetItem(
+        icon: FontAwesomeIcons.vectorSquare,
+        data: "Center Widget",
+        title: "Center",
+      ),
+      WidgetItem(
+        icon: FontAwesomeIcons.compressArrowsAlt,
+        data: "ConstrainedBox Widget",
+        title: "Constrained Box",
+      ),
+      WidgetItem(
+        icon: FontAwesomeIcons.square,
+        data: "Container Widget",
+        title: "Container",
+      ),
+      WidgetItem(
+        icon: FontAwesomeIcons.expandArrowsAlt,
+        data: "Expanded Widget",
+        title: "Expanded",
+      ),
+      WidgetItem(
+        icon: FontAwesomeIcons.compress,
+        data: "Padding Widget",
+        title: "Padding",
+      ),
+      WidgetItem(
+        icon: FontAwesomeIcons.expand,
+        data: "SizedBox Widget",
+        title: "Sized Box",
+      ),
+    ],
+  ),
+];
+
+// Displays one Entry. If the entry has children then it's displayed
+// with an ExpansionTile.
+class _CollapsibleWidgetItem extends StatelessWidget {
+  const _CollapsibleWidgetItem(this.entry);
+
+  final Category entry;
+
+  Widget _buildTiles(Category root) {
+    if (root.children.isEmpty) return ListTile(title: Text(root.title));
+    return ExpansionTile(
+      key: PageStorageKey<Category>(root),
+      title: Text(root.title),
+      children: _buildChildren(root),
+      initiallyExpanded: true,
+    );
+  }
+
+  List<Widget> _buildChildren(root) {
+    List<Widget> children = [];
+    root.children.forEach((child) {
+      children.add(
+        _buildDraggableWidget(
+          title: child.title,
+          icon: child.icon,
+          data: child.data,
+        ),
+      );
+    });
+    return children;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildTiles(entry);
   }
 
   Widget _buildDraggableWidget({IconData icon, String title, String data}) {
@@ -278,17 +351,6 @@ class HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class TextSettingsTab extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Column(
-      children: <Widget>[
-        Text(""),
-      ],
     );
   }
 }
