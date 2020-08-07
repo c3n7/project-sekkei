@@ -126,7 +126,7 @@ class HomeScreenState extends State<HomeScreen> {
                         return Container(
                           height: 812,
                           width: 375,
-                          color: Colors.purple,
+                          color: Colors.black12,
                           child: Center(
                             child: Text(dropText),
                           ),
@@ -226,41 +226,63 @@ final List<Category> data = <Category>[
   Category(
     'Layout',
     <ItemInWidgetList>[
-      WidgetItem(
-        icon: FontAwesomeIcons.alignCenter,
-        data: "Align Widget",
-        title: "Align",
+      Category(
+        "Single-child",
+        <ItemInWidgetList>[
+          WidgetItem(
+            icon: FontAwesomeIcons.alignCenter,
+            data: "Align Widget",
+            title: "Align",
+          ),
+          WidgetItem(
+            icon: FontAwesomeIcons.vectorSquare,
+            data: "Center Widget",
+            title: "Center",
+          ),
+          WidgetItem(
+            icon: FontAwesomeIcons.compressArrowsAlt,
+            data: "ConstrainedBox Widget",
+            title: "Constrained Box",
+          ),
+          WidgetItem(
+            icon: FontAwesomeIcons.square,
+            data: "Container Widget",
+            title: "Container",
+          ),
+          WidgetItem(
+            icon: FontAwesomeIcons.expandArrowsAlt,
+            data: "Expanded Widget",
+            title: "Expanded",
+          ),
+          WidgetItem(
+            icon: FontAwesomeIcons.compress,
+            data: "Padding Widget",
+            title: "Padding",
+          ),
+          WidgetItem(
+            icon: FontAwesomeIcons.expand,
+            data: "SizedBox Widget",
+            title: "Sized Box",
+          ),
+        ],
       ),
-      WidgetItem(
-        icon: FontAwesomeIcons.vectorSquare,
-        data: "Center Widget",
-        title: "Center",
-      ),
-      WidgetItem(
-        icon: FontAwesomeIcons.compressArrowsAlt,
-        data: "ConstrainedBox Widget",
-        title: "Constrained Box",
-      ),
-      WidgetItem(
-        icon: FontAwesomeIcons.square,
-        data: "Container Widget",
-        title: "Container",
-      ),
-      WidgetItem(
-        icon: FontAwesomeIcons.expandArrowsAlt,
-        data: "Expanded Widget",
-        title: "Expanded",
-      ),
-      WidgetItem(
-        icon: FontAwesomeIcons.compress,
-        data: "Padding Widget",
-        title: "Padding",
-      ),
-      WidgetItem(
-        icon: FontAwesomeIcons.expand,
-        data: "SizedBox Widget",
-        title: "Sized Box",
-      ),
+      Category("Multi-child", <ItemInWidgetList>[
+        WidgetItem(
+          icon: FontAwesomeIcons.columns,
+          data: "Column Widget",
+          title: "Column",
+        ),
+        WidgetItem(
+          icon: FontAwesomeIcons.list,
+          data: "ListView Widget",
+          title: "List View",
+        ),
+        WidgetItem(
+          icon: FontAwesomeIcons.stream,
+          data: "Row Widget",
+          title: "Row",
+        ),
+      ]),
     ],
   ),
 ];
@@ -274,24 +296,83 @@ class _CollapsibleWidgetItem extends StatelessWidget {
 
   Widget _buildTiles(Category root) {
     if (root.children.isEmpty) return ListTile(title: Text(root.title));
-    return ExpansionTile(
-      key: PageStorageKey<Category>(root),
-      title: Text(root.title),
-      children: _buildChildren(root),
-      initiallyExpanded: true,
+    // https://stackoverflow.com/questions/49557555/custom-style-or-theme-for-expansion-tile-header-flutter
+    // When ExpansionTile is closed
+    //    the style of header text i.e. title depends on ThemeData.textTheme.subhead
+    //    whereas, the style of the arrow icon depends on ThemeData.unselectedWidgetColor
+    // When ExpansionTile is open
+    //    the color of both the widgets depends on ThemeData.accentColor
+    return Theme(
+      data: ThemeData(
+        textTheme: TextTheme(
+          subtitle1: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        accentColor: Colors.white70,
+        unselectedWidgetColor: Colors.white,
+        dividerColor: Colors.white10,
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+      ),
+      child: ExpansionTile(
+        key: PageStorageKey<Category>(root),
+        title: Text(root.title),
+        children: _buildChildren(root),
+        initiallyExpanded: true,
+      ),
+    );
+  }
+
+  Widget _buildSubTiles(Category root) {
+    if (root.children.isEmpty) return ListTile(title: Text(root.title));
+    return Theme(
+      data: ThemeData(
+        textTheme: TextTheme(
+          subtitle1: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+          ),
+        ),
+        accentColor: Colors.white70,
+        unselectedWidgetColor: Colors.white,
+        dividerColor: Colors.black12,
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+      ),
+      child: ExpansionTile(
+        tilePadding: EdgeInsets.only(left: 26, right: 16),
+        key: PageStorageKey<Category>(root),
+        title: Text(root.title),
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(left: 36),
+            child: Column(
+              children: _buildChildren(root),
+            ),
+          ),
+        ],
+        initiallyExpanded: true,
+      ),
     );
   }
 
   List<Widget> _buildChildren(root) {
     List<Widget> children = [];
     root.children.forEach((child) {
-      children.add(
-        _buildDraggableWidget(
-          title: child.title,
-          icon: child.icon,
-          data: child.data,
-        ),
-      );
+      if (child.runtimeType == Category) {
+        children.add(_buildSubTiles(child));
+      } else {
+        children.add(
+          _buildDraggableWidget(
+            title: child.title,
+            icon: child.icon,
+            data: child.data,
+          ),
+        );
+      }
     });
     return children;
   }
@@ -305,9 +386,9 @@ class _CollapsibleWidgetItem extends StatelessWidget {
     return Draggable(
       data: data,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: 6,
-          horizontal: 10,
+        padding: EdgeInsets.only(
+          bottom: 12,
+          left: 10,
         ),
         child: Row(
           children: <Widget>[
