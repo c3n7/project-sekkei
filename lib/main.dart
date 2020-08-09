@@ -29,10 +29,10 @@ class MyApp extends StatelessWidget {
 
 class HomeScreen extends StatefulWidget {
   @override
-  HomeScreenState createState() => HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   String dropText = "Drop Here";
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
@@ -127,8 +127,9 @@ class HomeScreenState extends State<HomeScreen> {
                           height: 812,
                           width: 375,
                           color: Colors.black12,
-                          child: Center(
-                            child: Text(dropText),
+                          child: DrawwableWidgetSpace(
+                            key: UniqueKey(),
+                            dropText: dropText,
                           ),
                         );
                       },
@@ -199,8 +200,8 @@ class Category extends ItemInWidgetList {
   final List<ItemInWidgetList> children;
 }
 
-class WidgetItem extends ItemInWidgetList {
-  WidgetItem({String title, this.data, this.icon}) : super(title);
+class WidgetListItem extends ItemInWidgetList {
+  WidgetListItem({String title, this.data, this.icon}) : super(title);
 
   final String data;
   final IconData icon;
@@ -211,12 +212,12 @@ final List<Category> data = <Category>[
   Category(
     'Basic',
     <ItemInWidgetList>[
-      WidgetItem(
+      WidgetListItem(
         title: 'Text',
         data: "Text Widget",
         icon: FontAwesomeIcons.paragraph,
       ),
-      WidgetItem(
+      WidgetListItem(
         title: 'Image',
         data: "Image Widget",
         icon: FontAwesomeIcons.image,
@@ -229,37 +230,37 @@ final List<Category> data = <Category>[
       Category(
         "Single-child",
         <ItemInWidgetList>[
-          WidgetItem(
+          WidgetListItem(
             icon: FontAwesomeIcons.alignCenter,
             data: "Align Widget",
             title: "Align",
           ),
-          WidgetItem(
+          WidgetListItem(
             icon: FontAwesomeIcons.vectorSquare,
             data: "Center Widget",
             title: "Center",
           ),
-          WidgetItem(
+          WidgetListItem(
             icon: FontAwesomeIcons.compressArrowsAlt,
             data: "ConstrainedBox Widget",
             title: "Constrained Box",
           ),
-          WidgetItem(
+          WidgetListItem(
             icon: FontAwesomeIcons.square,
             data: "Container Widget",
             title: "Container",
           ),
-          WidgetItem(
+          WidgetListItem(
             icon: FontAwesomeIcons.expandArrowsAlt,
             data: "Expanded Widget",
             title: "Expanded",
           ),
-          WidgetItem(
+          WidgetListItem(
             icon: FontAwesomeIcons.compress,
             data: "Padding Widget",
             title: "Padding",
           ),
-          WidgetItem(
+          WidgetListItem(
             icon: FontAwesomeIcons.expand,
             data: "SizedBox Widget",
             title: "Sized Box",
@@ -267,17 +268,17 @@ final List<Category> data = <Category>[
         ],
       ),
       Category("Multi-child", <ItemInWidgetList>[
-        WidgetItem(
+        WidgetListItem(
           icon: FontAwesomeIcons.columns,
           data: "Column Widget",
           title: "Column",
         ),
-        WidgetItem(
+        WidgetListItem(
           icon: FontAwesomeIcons.list,
           data: "ListView Widget",
           title: "List View",
         ),
-        WidgetItem(
+        WidgetListItem(
           icon: FontAwesomeIcons.stream,
           data: "Row Widget",
           title: "Row",
@@ -433,5 +434,38 @@ class _CollapsibleWidgetItem extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class DrawwableWidgetSpace extends StatefulWidget {
+  final String dropText;
+  DrawwableWidgetSpace({Key key, this.dropText}) : super(key: key);
+  @override
+  _DrawwableWidgetSpaceState createState() =>
+      _DrawwableWidgetSpaceState(dropText: this.dropText);
+}
+
+class _DrawwableWidgetSpaceState extends State<DrawwableWidgetSpace> {
+  String dropText;
+  Color color = Colors.red;
+  _DrawwableWidgetSpaceState({this.dropText});
+  @override
+  Widget build(BuildContext context) {
+    if (dropText == "Container Widget") {
+      return new Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: color,
+        child: GestureDetector(onTap: () {
+          setState(() {
+            color = Colors.yellow;
+          });
+        }),
+      );
+    } else {
+      return new Center(
+        child: Text(dropText),
+      );
+    }
   }
 }
