@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,6 +11,23 @@ class SomeData {
   Color iColor;
 
   SomeData({this.name, this.iColor});
+}
+
+enum Widgets {
+  Text,
+  Image,
+  Align,
+  // ...
+  Center,
+  ConstrainedBox,
+  Container,
+  Expanded,
+  Padding,
+  SizedBox,
+  // ...
+  Column,
+  ListView,
+  Row,
 }
 
 class MyApp extends StatelessWidget {
@@ -60,101 +78,104 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: Row(
-              children: <Widget>[
-                // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-                //                Left Sidebar
-                // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-                Container(
-                  color: Colors.black26,
-                  width: 80,
-                  child: Column(
-                    children: <Widget>[
-                      MaterialButton(
-                        height: 65,
-                        child: Icon(
-                          Icons.title,
-                        ),
-                        onPressed: () {},
-                      ),
-                      MaterialButton(
-                        height: 65,
-                        child: Icon(
-                          Icons.book,
-                        ),
-                        onPressed: () {},
-                      ),
-                      MaterialButton(
-                        height: 65,
-                        child: Icon(
-                          Icons.web_asset,
-                        ),
-                        onPressed: () {},
-                      ),
-                      MaterialButton(
-                        autofocus: true,
-                        highlightColor: Color(0xFF525252),
-                        height: 65,
-                        child: Icon(
-                          Icons.add_alert,
-                        ),
-                        onPressed: () {},
-                      ),
-                      MaterialButton(
-                        height: 65,
-                        child: Icon(
-                          Icons.dns,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  color: Colors.black12,
-                  width: 300,
-                  child: _CollapsibleWidgetItemList(),
-                ),
-                // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-                //                Centre Canvas
-                // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-                Expanded(
-                  child: Center(
-                    child: DragTarget(
-                      builder:
-                          (context, List<String> candidateData, rejectedData) {
-                        return Container(
-                          height: 812,
-                          width: 375,
-                          color: Colors.black12,
-                          child: DrawwableWidgetSpace(
-                            key: UniqueKey(),
-                            dropText: dropText,
+            child: ChangeNotifierProvider(
+              create: (context) => CurrentItem(),
+              child: Row(
+                children: <Widget>[
+                  // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+                  //                Left Sidebar
+                  // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+                  Container(
+                    color: Colors.black26,
+                    width: 80,
+                    child: Column(
+                      children: <Widget>[
+                        MaterialButton(
+                          height: 65,
+                          child: Icon(
+                            Icons.title,
                           ),
-                        );
-                      },
-                      onWillAccept: (data) {
-                        return true;
-                      },
-                      onAccept: (data) {
-                        setState(
-                          () {
-                            dropText = data;
-                          },
-                        );
-                      },
+                          onPressed: () {},
+                        ),
+                        MaterialButton(
+                          height: 65,
+                          child: Icon(
+                            Icons.book,
+                          ),
+                          onPressed: () {},
+                        ),
+                        MaterialButton(
+                          height: 65,
+                          child: Icon(
+                            Icons.web_asset,
+                          ),
+                          onPressed: () {},
+                        ),
+                        MaterialButton(
+                          autofocus: true,
+                          highlightColor: Color(0xFF525252),
+                          height: 65,
+                          child: Icon(
+                            Icons.add_alert,
+                          ),
+                          onPressed: () {},
+                        ),
+                        MaterialButton(
+                          height: 65,
+                          child: Icon(
+                            Icons.dns,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-                //                Right Sidebar
-                // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-                Container(
-                  color: Colors.black12,
-                  width: 300,
-                  child: TextSettingsTab(),
-                ),
-              ],
+                  Container(
+                    color: Colors.black12,
+                    width: 300,
+                    child: _CollapsibleWidgetItemList(),
+                  ),
+                  // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+                  //                Centre Canvas
+                  // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+                  Expanded(
+                    child: Center(
+                      child: DragTarget(
+                        builder: (context, List<String> candidateData,
+                            rejectedData) {
+                          return Container(
+                            height: 812,
+                            width: 375,
+                            color: Colors.black12,
+                            child: DrawwableWidgetSpace(
+                              key: UniqueKey(),
+                              dropText: dropText,
+                            ),
+                          );
+                        },
+                        onWillAccept: (data) {
+                          return true;
+                        },
+                        onAccept: (data) {
+                          setState(
+                            () {
+                              dropText = data;
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+                  //                Right Sidebar
+                  // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+                  Container(
+                    color: Colors.black12,
+                    width: 300,
+                    child: TextSettingsTab(),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -168,7 +189,11 @@ class TextSettingsTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Column(
       children: <Widget>[
-        Text(""),
+        Consumer<CurrentItem>(
+          builder: (context, currentItem, child) {
+            return Text(currentItem.getCurrentItem());
+          },
+        ),
       ],
     );
   }
@@ -448,24 +473,41 @@ class DrawwableWidgetSpace extends StatefulWidget {
 class _DrawwableWidgetSpaceState extends State<DrawwableWidgetSpace> {
   String dropText;
   Color color = Colors.red;
+  String currentItem;
+
   _DrawwableWidgetSpaceState({this.dropText});
   @override
   Widget build(BuildContext context) {
     if (dropText == "Container Widget") {
-      return new Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: color,
-        child: GestureDetector(onTap: () {
-          setState(() {
-            color = Colors.yellow;
-          });
-        }),
-      );
+      return new Consumer<CurrentItem>(builder: (context, currentItem, child) {
+        return Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: color,
+          child: GestureDetector(onTap: () {
+            setState(() {
+              currentItem.setCurrentItem(dropText);
+              color = Colors.yellow;
+            });
+          }),
+        );
+      });
     } else {
       return new Center(
         child: Text(dropText),
       );
     }
+  }
+}
+
+class CurrentItem extends ChangeNotifier {
+  String _currentItem = "";
+  setCurrentItem(String currentItem) {
+    this._currentItem = currentItem;
+    notifyListeners();
+  }
+
+  String getCurrentItem() {
+    return this._currentItem;
   }
 }
